@@ -1,7 +1,6 @@
 
-const API_KEY = '22578935 - bf31ef834e5011bcd0b44501d';
+const API_KEY = '22578935-bf31ef834e5011bcd0b44501d';
 const BASE_URL = 'https://pixabay.com/api/';
-// const searchQuery = e.currentTarget.elements.searchQuery.value;
 
 const options = {
   headers: {
@@ -44,5 +43,5 @@ incrementPage() {
 
 }
 
-// export default {getImages};
+
 

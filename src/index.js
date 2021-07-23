@@ -1,56 +1,54 @@
 import './sass/main.scss';
-import galleryList from './templates/gallery-list.hbs';
-// import galleryItem from './templates/gallery-item.hbs';
+import galleryListTpl from './templates/gallery-list.hbs';
 import { Notify } from "notiflix";
 const axios = require('axios').default;
 import GalleryImages from './js/request.js';
-import loadMoreBtn from './js/load-more-btn.js';
+import LoadMoreBtn from './js/load-more-btn.js';
 
 const refs = {
   galleryList: document.querySelector('.gallery'),
   searchForm: document.querySelector('.search-form'),
 };
-
-// const loadMoreBtn = new LoadMoreBtn({
-//   selector: '.load-more',
-//   hidden: true,
-// });
-// const GalleryImages = new GalleryImages();
-
+const loadButton = new LoadMoreBtn({
+  selector: '.load-more',
+  hidden: true,
+});
+const galleryImagesList = new GalleryImages();
 
 refs.searchForm.addEventListener('submit', onSearch);
-loadMoreBtn.ref.button.addEventListener('click', getImages);
-
+loadButton.ref.button.addEventListener('click', getImages);
+// const totalHits = images.length;
 function onSearch(e) {
   e.preventDefault();
   
-  GalleryImages.searchQuery = e.currentTarget.elements.searchQuery.value;
+  galleryImagesList.searchQuery = e.currentTarget.elements.searchQuery.value;
   
-  if (GalleryImages.searchQuery === '') {
+  if (galleryImagesList.searchQuery === '') {
     Notify.info("Sorry, there are no images matching your search query. Please try again.");
-  } else {
-      return Notify.info(`Hooray! We found ${totalHits} images.`);
   }
+  // else {
+  //     return Notify.info(`Hooray! We found ${totalHits} images.`);
+  // }
 
-  loadMoreBtn.show();
-  GalleryImages.resetPage();
-  clearGalleryImages();
+  loadButton.show();
+  galleryImagesList.resetPage();
+  cleargalleryImagesList();
   getImages();
 }
 
 function getImages() {
-  loadMoreBtn.disable();
-  GalleryImage.getImages().then(images => {
+  loadButton.disable();
+  galleryImagesList.getImages().then(images => {
     appendImagesMarkup(images);
-    loadMoreBtn.enable();
+    loadButton.enable();
   });
 }
 
 function appendImagesMarkup(images) {
-  refs.galleryList.insertAdjacentHTML('beforeend', galleryList(images));
+  refs.galleryList.insertAdjacentHTML('beforeend', galleryListTpl(images));
 }
 
-function cleargalleryList() {
+function cleargalleryImagesList() {
   refs.galleryList.innerHTML = '';
 }
 

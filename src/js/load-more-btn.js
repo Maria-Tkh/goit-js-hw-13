@@ -8,22 +8,18 @@ export default class LoadMoreBtn {
   Ref(selector) {
     const ref = {};
     ref.button = document.querySelector(selector);
-    // refs.label = refs.button.querySelector('.label');
-    // refs.spinner = refs.button.querySelector('.spinner');
-
+    
     return ref;
   }
 
   enable() {
     this.ref.button.disabled = false;
-    // this.refs.label.textContent = 'Показать ещё';
-    // this.refs.spinner.classList.add('is-hidden');
+   
   }
 
   disable() {
     this.ref.button.disabled = true;
-    // this.refs.label.textContent = 'Загружаем...';
-    // this.refs.spinner.classList.remove('is-hidden');
+   
   }
 
   show() {
