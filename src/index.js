@@ -39,11 +39,11 @@ function onSearch(e) {
 function getImages() {
   loadButton.disable();
   galleryImagesList.getImages().then(images => {
-
+console.log(images);
 
 
     appendImagesMarkup(images);
-    console.log(images);
+   
     loadButton.enable();
   });
 }

@@ -13,7 +13,8 @@ export default class GalleryImages {
     const response = await fetch(`${BASE_URL}?key=${API_KEY}&q=${this.searchQuery}&image_type=photo&
     orientation=horizontal&safesearch=true&page=${this.page}&per_page=40`);
     const images = await response.json();
-    return images;
+   return images;
+    // console.log(images);
      };
   // 
 
