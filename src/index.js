@@ -3,49 +3,84 @@ import galleryListTpl from './templates/gallery-list.hbs';
 import { Notify } from "notiflix";
 const axios = require('axios').default;
 import GalleryImages from './js/request.js';
-import LoadMoreBtn from './js/load-more-btn.js';
+// import LoadMoreBtn from './js/load-more-btn.js';
 
 const refs = {
   galleryList: document.querySelector('.gallery'),
   searchForm: document.querySelector('.search-form'),
+  loadMoreBtn: document.querySelector('.load-more'),
 };
-const loadButton = new LoadMoreBtn({
-  selector: '.load-more',
-  hidden: true,
-});
+// const loadButton = new LoadMoreBtn({
+//   selector: '.load-more',
+//   hidden: false,
+// });
 const galleryImagesList = new GalleryImages();
 
-refs.searchForm.addEventListener('submit', onSearch);
-loadButton.ref.button.addEventListener('click', getImages);
+
+
 // const totalHits = images.length;
 function onSearch(e) {
   e.preventDefault();
-  
-  galleryImagesList.searchQuery = e.currentTarget.elements.searchQuery.value;
-  
-  if (galleryImagesList.searchQuery === '') {
-    Notify.info("Sorry, there are no images matching your search query. Please try again.");
-  }
-   // else {
-  //     return Notify.info(`Hooray! We found ${totalHits} images.`);
-  // }
+  refs.loadMoreBtn.classList.add('is-hidden');
 
-  loadButton.show();
   galleryImagesList.resetPage();
+  galleryImagesList.resetImages();
+  galleryImagesList.searchQuery = e.currentTarget.elements.searchQuery.value.trim();
+  
   cleargalleryImagesList();
   getImages();
 }
 
 function getImages() {
-  loadButton.disable();
+
   galleryImagesList.getImages().then(images => {
-console.log(images);
-
-
-    appendImagesMarkup(images);
-   
-    loadButton.enable();
-  });
+    // console.log(images);
+    // console.log(images.hits.length);
+    appendImagesMarkup(images.hits);
+    
+    const totalHits = images.totalHits;
+      if (images.hits.length === 0) {
+     Notify.info("Sorry, there are no images matching your search query. Please try again.");
+     return;
+      }
+    
+    if (galleryImagesList.searchQuery === '') {
+     cleargalleryImagesList();
+     return;
+      }
+    
+    if (images.hits.length > 0) {
+      Notify.info(`Hooray! We found ${totalHits} images.`);
+      refs.loadMoreBtn.classList.remove('is-hidden');
+      // return;
+    }
+    
+    galleryImagesList.incrementPage();
+    galleryImagesList.totalImages(images.hits.length);
+    galleryImagesList.onTotalHits(images.totalHits);
+    cleargalleryImagesList();
+     if (images.hits.length < 40) {
+      Notify.info("We're sorry, but you've reached the end of search results.");
+      refs.loadMoreBtn.classList.add('is-hidden');
+      return;
+     }
+    appendImagesMarkup(images.hits);
+  })
+  .catch (error => console.log(error));
+}
+const onLoadMore = () => {
+  galleryImagesList.getImages()
+    .then(images => {
+      galleryImagesList.incrementPage();
+      galleryImagesList.totalImages(images.hits.length);
+      appendImagesMarkup(images.hits);
+      if (images.hits.length < 40) {
+      Notify.info("We're sorry, but you've reached the end of search results.");
+      refs.loadMoreBtn.classList.add('is-hidden');
+      return;
+     }
+    })
+    .catch (error => console.log(error));
 }
 
 function appendImagesMarkup(images) {
@@ -56,6 +91,8 @@ function cleargalleryImagesList() {
   refs.galleryList.innerHTML = '';
 }
 
+refs.searchForm.addEventListener('submit', onSearch);
+refs.loadMoreBtn.addEventListener('click', onLoadMore);
 
 
 

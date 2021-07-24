@@ -7,6 +7,8 @@ export default class GalleryImages {
   constructor() {
     this.searchQuery = '';
     this.page = 1;
+    this.shownCards = 0;
+    this.totalCards = 0;
   }
 
  async getImages() {
@@ -18,24 +20,29 @@ export default class GalleryImages {
      };
   // 
 
-    // getImages() {
-    //   const url = `${BASE_URL}?key=${API_KEY}&q=${this.searchQuery}&image_type=photo&
-    //   orientation=horizontal&safesearch=true&page=${this.page}&per_page=40`;
-    // return fetch(url, options)
-    //   .then(response => response.json())
-    //   .then(({ images }) => {
-    //     this.incrementPage();
-    //     return images;
-    //   });
-    // }
-  
     incrementPage() {
       this.page += 1;
     }
 
     resetPage() {
       this.page = 1;
-    }
+  }
+
+  onTotalHits(value) {
+    this.totalCards = value;
+  }
+  
+   totalImages(value) {
+    this.shownCards += value;
+  }
+
+   resetImages() {
+    this.shownCards = 0;
+  }
+
+  ifTotalImages() {
+    return (this.shownCards >= this.totalCards);
+  }
 
     get query() {
       return this.searchQuery;
