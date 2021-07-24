@@ -26,7 +26,7 @@ function onSearch(e) {
   if (galleryImagesList.searchQuery === '') {
     Notify.info("Sorry, there are no images matching your search query. Please try again.");
   }
-  // else {
+   // else {
   //     return Notify.info(`Hooray! We found ${totalHits} images.`);
   // }
 
@@ -39,13 +39,17 @@ function onSearch(e) {
 function getImages() {
   loadButton.disable();
   galleryImagesList.getImages().then(images => {
+
+
+
     appendImagesMarkup(images);
+    console.log(images);
     loadButton.enable();
   });
 }
 
 function appendImagesMarkup(images) {
-  refs.galleryList.insertAdjacentHTML('beforeend', galleryListTpl(images));
+ refs.galleryList.insertAdjacentHTML('beforeend', galleryListTpl(images));
 }
 
 function cleargalleryImagesList() {
