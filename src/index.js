@@ -26,8 +26,11 @@ function onSearch(e) {
   galleryImagesList.resetPage();
   galleryImagesList.resetImages();
   galleryImagesList.searchQuery = e.currentTarget.elements.searchQuery.value.trim();
-  
   cleargalleryImagesList();
+  if (galleryImagesList.searchQuery === '') {
+    //  cleargalleryImagesList();
+     return;
+      }
   getImages();
 }
 
@@ -44,10 +47,10 @@ function getImages() {
      return;
       }
     
-    if (galleryImagesList.searchQuery === '') {
-     cleargalleryImagesList();
-     return;
-      }
+    // if (galleryImagesList.searchQuery === '') {
+    //  cleargalleryImagesList();
+    //  return;
+    //   }
     
     if (images.hits.length > 0) {
       Notify.info(`Hooray! We found ${totalHits} images.`);
