@@ -52,6 +52,7 @@ function getImages() {
     //  return;
     //   }
     
+    
     if (images.hits.length > 0) {
       Notify.info(`Hooray! We found ${totalHits} images.`);
       refs.loadMoreBtn.classList.remove('is-hidden');
